@@ -8,14 +8,14 @@
             <Label
             FontAttributes="Bold"
             HorizontalOptions="Center"
-            Text="Error 0 of 6"/>
-            <Image HeightRequest="200" Source="hangman"/>
+            Text="{Binding GameStatus}"/>
+            <Image HeightRequest="200" Source="{Binding CurrentImage}"/> <!--hangman-->
             <Label FontSize="40"
                    HorizontalOptions="Center"
                    Text="{Binding Spotlight}"/>
             <Label FontSize="Large"
                    HorizontalTextAlignment="Center"
-                   Text="You Lost!"/>
+                   Text="{Binding Message}"/>
             <Button HorizontalOptions="Center"
                     Text="Reset"
                     WidthRequest="100"/>
@@ -27,8 +27,9 @@
             <BindableLayout.ItemTemplate>
                     <DataTemplate>
                     <Button HeightRequest="50"
-                            Text="{Binding .}"
-                            WidthRequest="50"/>
+                            Text="{Binding . }"
+                            WidthRequest="50"
+                            Clicked="Button_Clicked"/>
                 </DataTemplate>
             </BindableLayout.ItemTemplate>
         </FlexLayout>

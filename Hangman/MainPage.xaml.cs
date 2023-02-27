@@ -59,7 +59,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
         "python",
         "java",
-        "javascrip",
+        "javascript",
         "angular",
         "csharp",
         "maui",
@@ -91,7 +91,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     int mistakes = 0;
     int maxWrong = 6;
     private string gameStatus;
-    private string currentImage = "img0.jpg"; // Not  downloaded yet
+    private string currentImage = "img0.jpg";
     #endregion
     public MainPage()
     {
@@ -110,7 +110,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 
     private void CalculateWord(string answer, List<char> guessed)
     {
-        var temp = answer.Select(x => (guessed.IndexOf(x) > 0 ? x : '_'))
+        var temp = answer.Select(x => (guessed.IndexOf(x) >= 0 ? x : '_'))
             .ToArray();
         Spotlight = string.Join(' ', temp);
     }
@@ -152,6 +152,30 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         if (mistakes == maxWrong)
         {
             Message = "You Lost!";
+            DisableLetters();
+        }
+    }
+
+    private void DisableLetters()
+    {
+        foreach (var children in LettersContainer.Children)
+        {
+            var btn = children as Button;
+            if (btn != null)
+            {
+                btn.IsEnabled = false;
+            }
+        }
+    }
+    private void EnableLetters()
+    {
+        foreach (var children in LettersContainer.Children)
+        {
+            var btn = children as Button;
+            if (btn != null)
+            {
+                btn.IsEnabled = true;
+            }
         }
     }
 
@@ -160,11 +184,24 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         if (Spotlight.Replace(" ", "") == answer)
         {
             Message = "You Win!";
+            DisableLetters();
         }
     }
 
     private void UpdateStatus()
     {
         GameStatus = $"Errors: {mistakes} of{maxWrong}";
+    }
+
+    private void Reset_Clicked(object sender, EventArgs e)
+    {
+        mistakes = 0;
+        guessed = new List<char>();
+        CurrentImage = "img0.jpg";
+        PickWord();
+        CalculateWord(answer, guessed);
+        Message = "";
+        UpdateStatus();
+        EnableLetters();
     }
 }
